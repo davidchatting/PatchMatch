@@ -4,6 +4,7 @@ PatchMatch patchMatch=null;
 
 PImage image=null;
 PShape mask=null;
+int x=0,y=0,w=0,h=0;
 
 void setup() {
   patchMatch=new PatchMatch(this);
@@ -14,6 +15,7 @@ void setup() {
 
 void draw() {
   background(0);
+  
   if(patchMatch.available()){
     image(patchMatch.getResultPImage(),0,0,width,height);
   }
@@ -22,32 +24,34 @@ void draw() {
   }
   
   if(mousePressed || !patchMatch.available()){
-    //showSelectionBox();
+    showSelectionBox();
   }
 }
 
 void showSelectionBox(){
-  if(mask!=null){
-    noFill();
-    stroke(0,128);
-    strokeWeight(0.5f);
-    shape(mask);
-  }
+  noFill();
+  stroke(0,128);
+  strokeWeight(0.5f);
+  rect(x,y,w,h);
+  stroke(255,128);
+  rect(x+1,y+1,w,h);
 }
 
 void mousePressed() {
-  mask=createShape();
-  mask.beginShape();
-  mask.vertex(mouseX,mouseY);
+  x=mouseX;
+  y=mouseY;
+  w=0;
+  h=0;
 }
 
 void mouseDragged() {
-  mask.vertex(mouseX,mouseY);
+  w=mouseX-x;
+  h=mouseY-y;
 }
 
 void mouseReleased() {
-  mask.vertex(mouseX,mouseY);
-  mask.endShape(CLOSE);
-  
-  patchMatch.patch(image,mask,2);
+  if((w*h)!=0){
+    mask=createShape(RECT,x,y,w,h);
+    patchMatch.patch(image,mask,2);
+  }
 }

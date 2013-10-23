@@ -134,6 +134,7 @@ public class PatchMatch extends Thread {
 			result=parent.createGraphics(w,h,PGraphics.P2D);
 			result.beginDraw();
 			result.background(0);
+			m.disableStyle();
 			result.shape(m);
 			result.endDraw();
 		}
